@@ -3,19 +3,15 @@ import classes from './Burger.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
-
-
-
+    
     let IngsArray = [];
-    props.IngOrder.map((ing, index) => {
-        IngsArray.push(<BurgerIngredient key={index} type={ing} />)
+    props.IngOrder.map((e, index) => {
+        IngsArray.push(<BurgerIngredient key={index} type={e} />)
     })
 
     if (IngsArray.length === 0) {
         IngsArray = <p>Please start adding ingredients!</p>;
     }
-
-    
 
     return (
         <div className={classes.burger}>

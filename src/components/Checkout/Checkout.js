@@ -3,26 +3,28 @@ import { Route } from 'react-router-dom';
 import ContactData from './ContactData';
 import CheckoutSummary from '../Order/CheckoutSummary'
 
+import { connect } from 'react-redux';
+
 
 class Checkout extends Component {
-    state = {
-        IngOrder: [],
-        price: 0
-    }
+    // state = {
+    //     IngOrder: [],
+    //     price: 0
+    // }
 
-    componentDidMount() {
-        const query = new URLSearchParams(this.props.location.search);
-        const IngOrder = [];
-        let price = 0;
-        for ( let i of query.entries() ) {
-            if (i[0] === 'price') {
-                price = +i[1];
-            } else {
-                IngOrder.push(i[0])
-            }
-        }
-        this.setState({ IngOrder, price })       
-    }
+    // componentDidMount() {
+    //     const query = new URLSearchParams(this.props.location.search);
+    //     const IngOrder = [];
+    //     let price = 0;
+    //     for ( let i of query.entries() ) {
+    //         if (i[0] === 'price') {
+    //             price = +i[1];
+    //         } else {
+    //             IngOrder.push(i[0])
+    //         }
+    //     }
+    //     this.setState({ IngOrder, price })       
+    // }
 
     checkoutCancel = () => {
         this.props.history.goBack()
@@ -36,16 +38,24 @@ class Checkout extends Component {
         return (
             <div>
                 <CheckoutSummary 
-                IngOrder={this.state.IngOrder} 
+                IngOrder={this.props.ingOrder} 
                 checkoutCancel={this.checkoutCancel} 
                 checkoutContinue={this.checkoutContinue}
                 />
                 <Route path={this.props.match.path + '/contact-data'}
-                render={(props) => (<ContactData IngOrder={this.state.IngOrder} price={this.state.price} {...props} />)} />
+                component={ContactData}/>
             </div>
         )
     }
 
 }
 
-export default Checkout;
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        ingOrder: state.ingOrder,
+        price: state.totalPrice
+    }
+} 
+
+export default connect(mapStateToProps)(Checkout);
